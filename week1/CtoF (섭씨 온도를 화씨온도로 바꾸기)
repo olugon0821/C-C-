@@ -1,0 +1,16 @@
+#include <stdio.h>
+
+int main(){
+
+int num;
+double trans;
+
+printf("(1에서 100사이)온도 입력 :");
+scanf("%d",&num);
+
+trans = num*9.0/5+32;
+
+printf("화씨 온도 : %.2f \n",trans);
+
+return 0; 
+}
