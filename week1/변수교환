@@ -1,0 +1,44 @@
+#include <stdio.h>
+
+
+
+int main(){
+
+int a, b, temp;
+
+
+
+printf("두 정수 입력 : ");
+
+
+
+scanf("%d %d", &a,&b);
+
+
+
+printf("변환전 두 수 : a = %d, b=%d\n", a, b);
+
+
+
+temp = a;
+
+
+
+a = b;
+
+
+
+b = temp;
+
+
+
+printf("변환 후 두 수 : a=%d, b=%d\n", a, b);
+
+
+
+return 0;
+
+
+
+}
+
