@@ -1,0 +1,16 @@
+#include <stdio.h>
+
+int solution(int n, int m, int number){
+
+    if(number%n==0 && number%m==0)
+        return 1;
+    else
+        return 0;
+}
+
+int main(){
+
+    int result = solution(10,5,55);
+    printf("%d\n",result);
+    return 0;
+}
