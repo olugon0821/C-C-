@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+int main() {
+    int a, num = 1;
+
+    printf("입력: ");
+    scanf("%d",&a);
+
+    for(int i = 2; i * i <= a; i++){
+        if(a % i == 0){
+            num = 0;
+            break;
+        }
+    }
+    if(num){
+        printf("%d는 소수 입니다.",a);
+    }else{
+        printf("%d는 소수가 아닙니다.",a);
+    }
+    return 0;
+}
