@@ -1,0 +1,26 @@
+#include <stdio.h>
+
+int main() {
+    char str[100];
+    int idx  = 0;
+    int number, upper, lower, etc;
+    printf("문자열 입력 :");
+    scanf("%s",str);
+    while(str[idx] != NULL){
+        if(str[idx]>='0' && str[idx]<='9')
+            number++;
+        else if(str[idx]>='a' && str[idx]<='z')
+            lower++;
+        else if(str[idx]>='A' && str[idx]<='Z')
+            upper++;
+        else etc++;
+        idx++;
+    }
+    
+    printf("숫자 :%d ",number);
+    printf("소문자 :%d ",lower);
+    printf("대문자 :%d ",upper);
+    printf("특수문자 :%d ",etc);
+
+    return 0;
+}
