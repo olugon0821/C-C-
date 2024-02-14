@@ -1,0 +1,26 @@
+#include <stdio.h>
+
+int func1(void){
+    int num = 10;
+    num++;
+    printf("func1 num : %d \n", num);
+    return 0;
+}
+
+int func2(){
+    int num1 = 20;
+    int num2 = 30;
+    num1++; num2--;
+    printf("num1 & num2 : %d %d \n", num1, num2);
+    return 0;
+    
+}
+
+
+int main() {
+     int num = 17;
+     func1();
+     func2();
+     printf("main num : %d \n",num);
+     return 0;
+}
