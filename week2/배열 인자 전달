@@ -1,0 +1,15 @@
+#include <stdio.h>
+#include <string.h>
+
+void Simple(int* param){
+    printf("%d %d",param[0],param[1]);
+    param[0]=100;
+}
+
+int main() {
+    int arr[3]={1,2,3};
+    Simple(arr);
+    printf(" %d",arr[0]);
+    
+    return 0;
+}
