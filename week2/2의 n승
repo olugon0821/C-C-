@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+int facto(int a){
+
+    if(a == 0)
+        return 1;
+
+    else
+        return facto(a-1) * 2;
+}
+
+int main()
+{
+    int a;
+
+    scanf("%d",&a);
+
+    printf("%d",facto(a));
+
+    return 0;
+}
