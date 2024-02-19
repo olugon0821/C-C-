@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+
+    int num;
+
+    while(1) {
+        printf("\n메뉴 : \n");
+        printf("1. 데이터 삽입\n");
+        printf("2. 데이터 수정\n");
+        printf("3. 데이터 검색\n");
+        printf("4. 데이터 삭제\n");
+        printf("5. 프로그램 종료\n");
+        printf("선택 :");
+        scanf("%d", &num);
+
+        //if문이 3개 이상이면 switch문으로 변경
+        switch (num) {
+            case 1:
+                printf("데이터 삽입\n");
+                break;
+            case 2:
+                printf("데이터 수정\n");
+                break;
+            case 3:
+                printf("데이터 검색\n");
+                break;
+            case 4:
+                printf("데이터 삭제\n");
+                break;
+            case 5:
+                printf("프로그램 종료\n");
+                exit(0);
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    return 0;
+}
+
+//1. 테이블 만들기
+//2. 테이블 삭제
+//3. 데이터 삽입
+//4. 데이터 삭제
+//5. 데이터 수정
+//6. 데이터 검색
+//7. 프로그램 종료
+//메뉴 :
