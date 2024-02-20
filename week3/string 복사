@@ -10,7 +10,7 @@ int main() {
     printf("문자 입력: ");
     fgets(str, sizeof(str),stdin);
 
-    strcpy(name,str);
+    strcpy(name,str); //문자열 복사
 
     printf("%s", name);
     
