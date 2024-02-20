@@ -1,0 +1,23 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct point{
+    int x;
+    int y;
+};
+
+int main() {
+    struct point p1 = {1,2};
+    struct point p2 = {100,200};
+    struct point* pptr=&p1;
+    (*pptr).x += 4;
+    (*pptr).y += 5;
+    printf("[%d %d]\n", pptr->x, pptr->y);
+
+    pptr=&p2;
+    pptr->x += 1;
+    pptr->y += 2;
+    printf("[%d %d]\n", (*pptr).x, (*pptr).y);
+    return 0;
+}
