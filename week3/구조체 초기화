@@ -1,0 +1,19 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct car{
+    char name[20];
+    char color[20];
+    int displacement;
+};
+
+int main() {
+
+    struct car avantte = {"아반떼","red",1800};
+    struct car grandgeur = {"그렌져","black",3000};
+    printf("%s %s %d\n",avantte.name,avantte.color,avantte.displacement);
+    printf("%s %s %d\n",grandgeur.name,grandgeur.color,grandgeur.displacement);
+
+    return 0;
+}
