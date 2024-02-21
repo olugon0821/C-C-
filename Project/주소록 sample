@@ -5,7 +5,7 @@
 #define MAX_STD 100
 
 typedef struct {
-    int id;
+    char id[20]; // 학번을 문자열로 변경
     char name[100];
     char phone[100];
     int age;
@@ -15,10 +15,10 @@ typedef struct {
 
 Student data[MAX_STD];
 
-void Insert(int id, char* name, char* phone, int age){
-
+void Insert(char* id, char* name, char* phone, int age){
+    // 학번은 문자열이므로 strcmp()를 사용하여 비교해야 합니다.
     for (int i = 0; i < MAX_STD; ++i) {
-        if(data[i].Used && data[i].id == id){
+        if(data[i].Used && strcmp(data[i].id, id) == 0){
             printf("\033[31m !!! 이미 존재하는 학번입니다. !!!\033[0m\n\n");
             return;
         }
@@ -26,54 +26,58 @@ void Insert(int id, char* name, char* phone, int age){
 
     for (int i = 0; i < MAX_STD; ++i) {
         if(!data[i].Used){
-            data[i].id = id;
+            strcpy(data[i].id, id);
             data[i].age = age;
             strcpy(data[i].name,name);
             strcpy(data[i].phone,phone);
             data[i].Used = 1;
 
-            printf("\n [데이터 삽입 완료 : 학번 : %d, 이름 : %s]\n\n",id,name);
+            printf("\n [데이터 삽입 완료 : 학번 : %s, 이름 : %s]\n\n", id, name);
             return;
         }
     }
     printf(" 데이터가 모두 찼습니다.\n\n");
 }
 
-void Update(int id, char* update_name,char* update_phone,int age){
-    
+void Update(char* id, char* update_name,char* update_phone,int age) {
 
     for (int i = 0; i < MAX_STD; ++i) {
-        if(data[i].Used && data[i].id == id){
-            strcpy(data[i].name,update_name);
-            strcpy(data[i].phone,update_phone);
+        if (data[i].Used && strcmp(data[i].id, id) == 0) {
+            strcpy(data[i].name, update_name);
+            strcpy(data[i].phone, update_phone);
             data[i].age = age;
-            printf(" 수정 되었습니다 : %d -> %s, %s, %d\n\n",id,update_name,update_phone,age);
+            printf(" 수정 되었습니다 : %s -> %s, %s, %d\n\n", id, update_name, update_phone, age);
             return;
         }
     }
         printf(" 데이터가 없습니다.\n\n");
 }
 
-void Delete(int id, char* name){
+void Delete(char* id, char* name){
+
     for (int i = 0; i < MAX_STD; ++i) {
-        if(data[i].Used && data[i].id == id){
+        if(data[i].Used && strcmp(data[i].id, id) == 0){
             data[i].Used = 0;
-            printf(" 데이터가 삭제 되었습니다. : %d, %s\n\n",id,data[i].name);
+            printf(" 데이터가 삭제 되었습니다. : %s, %s\n\n",id,data[i].name);
             return;
         }
     }
     printf(" 일치하는 데이터가 없습니다.\n\n");
 }
 
-void Search(int id){
+void Search(char* id){
+    int use = 0;
+
     printf("---------------------\n");
+
     for (int i = 0; i < MAX_STD; ++i) {
-        if(data[i].Used && data[i].id == id){
-            printf(" 데이터를 검색했습니다.\n---------------------\n - 학번 : %d\n - 이름 : %s\n - 전화번호 : %s\n - 나이 : %d\n---------------------\n \n\n",id,data[i].name,data[i].phone,data[i].age);
-            return;
+        if(data[i].Used && strncmp(data[i].id, id, strlen(id)) == 0){
+            printf(" 데이터를 검색했습니다.\n---------------------\n - 학번 : %s\n - 이름 : %s\n - 전화번호 : %s\n - 나이 : %d\n---------------------\n \n\n",data[i].id,data[i].name,data[i].phone,data[i].age);
+            use = 1;
         }
     }
-    printf(" 데이터를 찾지 못했습니다.\n\n");
+    if(use != 1)
+        printf(" 데이터를 찾지 못했습니다.\n\n");
 }
 
 void All(){
@@ -81,18 +85,19 @@ void All(){
 
     for (int i = 0; i < MAX_STD; ++i) {
         if (data[i].Used == 1) {
-            printf(" -----------------\n - 이름 : %s\n - 학번 : %d\n - 전화번호 : %s\n - 나이 : %d\n", data[i].name, data[i].id,data[i].phone,data[i].age);
+            printf(" -----------------\n - 이름 : %s\n - 학번 : %s\n - 전화번호 : %s\n - 나이 : %d\n", data[i].name, data[i].id,data[i].phone,data[i].age);
             Used = 1;
         }
     }
     if(Used == 0)
-    printf("\033[31m !!! 입력된 데이터가 없습니다. !!!\033[0m\n\n");
+        printf("\033[31m !!! 입력된 데이터가 없습니다. !!!\033[0m\n\n");
 }
 
 int main(){
-    int select, id, age;
+    int select, age;
     char name[100];
     char phone[100];
+    char id[20];
 
     while(1){
         printf("\033[35m===================\033[0m");
@@ -115,8 +120,8 @@ int main(){
             case 1:
                 printf("\n 데이터를 삽입합니다!\n\n");
                 printf(" 학번 입력 : ");
-                scanf(" %d",&id);
-                getchar();
+                fgets(id, sizeof(id), stdin);
+                id[strcspn(id, "\n")] = 0;
                 printf(" 이름 입력 : ");
                 fgets(name,sizeof(name),stdin);
                 name[strcspn(name,"\n")] = 0;
@@ -132,8 +137,8 @@ int main(){
             case 2:
                 printf("\n 데이터를 수정합니다!\n\n");
                 printf(" 수정할 학번 입력 : ");
-                scanf("%d",&id);
-                getchar();
+                fgets(id, sizeof(id), stdin);
+                id[strcspn(id, "\n")] = 0;
                 printf(" 새로운 이름 입력 : ");
                 fgets(name, sizeof(name),stdin);
                 name[strcspn(name,"\n")] = 0;
@@ -149,15 +154,16 @@ int main(){
             case 3:
                 printf("\n 데이터를 삭제 합니다!\n\n");
                 printf("삭제할 데이터의 학번을 입력하세요 : ");
-                scanf("%d",&id);
-                getchar();
+                fgets(id, sizeof(id), stdin);
+                id[strcspn(id, "\n")] = 0;
                 Delete(id,name);
                 break;
 
             case 4:
                 printf("\n 데이터를 검색합니다!\n\n");
                 printf("검색할 데이터의 학번을 입력하세요 : ");
-                scanf("%d",&id);
+                fgets(id, sizeof(id), stdin);
+                id[strcspn(id, "\n")] = 0;
                 Search(id);
                 break;
 
