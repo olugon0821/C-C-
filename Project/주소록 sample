@@ -1,0 +1,115 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_STD 100
+
+typedef struct {
+    int id;
+    char name[100];
+    int Used;
+
+} Student;
+
+Student data[MAX_STD];
+
+void Insert(int id, char* name){
+    for (int i = 0; i < MAX_STD; ++i) {
+        if(!data[i].Used){
+            data[i].id = id;
+            strcpy(data[i].name,name);
+            data[i].Used = 1;
+            printf("데이터 삽입 완료 : %d, %s\n",id,name);
+            return;
+        }
+    }
+    printf("데이터가 모두 찼습니다.");
+}
+
+void Update(int id, char* update){
+    for (int i = 0; i < MAX_STD; ++i) {
+        if(data[i].Used && data[i].id == id){
+            strcpy(data[i].name,update);
+            printf("수정 되었습니다 : %d -> %s\n",id,update);
+            return;
+        }
+    }
+    printf("데이터가 없습니다.\n");
+}
+
+void Delete(int id){
+    for (int i = 0; i < MAX_STD; ++i) {
+        if(data[i].Used && data[i].id == id){
+            data[i].Used = 0;
+            printf("데이터가 삭제 되었습니다. : %d, %s\n",id,data[i].name);
+            return;
+        }
+    }
+    printf("일치하는 데이터가 없습니다.\n");
+}
+
+void Search(int id){
+    for (int i = 0; i < MAX_STD; ++i) {
+        if(data[i].id && data[i].Used == id){
+            printf("데이터를 검색했습니다. : %d, %s\n",id,data[i].name);
+            return;
+        }
+    }
+    printf("데이터를 찾지 못했습니다.\n");
+}
+
+int main(){
+    int select, id;
+    char name[100];
+
+    while(1){
+        printf("\n 메뉴 :\n");
+        printf("1. 데이터 삽입\n");
+        printf("2. 데이터 수정\n");
+        printf("3. 데이터 삭제\n");
+        printf("4. 데이터 검색\n");
+        printf("5. 프로그램 종료\n");
+        printf("선택 : ");
+        scanf("%d",&select);
+        getchar();
+
+        switch (select) {
+            case 1:
+                printf("데이터를 삽입합니다!\n");
+                printf("학번 입력 : \n");
+                scanf("%d",&id);
+                getchar();
+                printf("이름 입력 : \n");
+                fgets(namfe,sizeof(name),stdin);
+                name[strcspn(name,"\n")] = 0;
+                Insert(id,name);
+                break;
+            case 2:
+                printf("데이터를 수정합니다!\n");
+                printf("수정할 학번 입력 : \n");
+                scanf("%d",&id);
+                getchar();
+                printf("새로운 이름 입력 : ");
+                fgets(name, sizeof(name),stdin);
+                name[strcspn(name,"\n")] = 0;
+                Update(id,name);
+                break;
+            case 3:
+                printf("데이터를 삭제 합니다!\n");
+                printf("삭제할 데이터의 학번을 입력하세요\n");
+                scanf("%d",&id);
+                getchar();
+                Delete(id);
+                break;
+            case 4:
+                printf("데이터를 검색합니다!\n");
+                printf("검색할 데이터의 학번을 입력하세요 : \n");
+                scanf("%d",&id);
+                Search(id);
+                break;
+            case 5:
+                printf("프로그램을 종료합니다!\n");
+                return 0;
+        }
+    }
+}
