@@ -39,15 +39,19 @@ void Insert(int id, char* name, char* phone, int age){
     printf(" 데이터가 모두 찼습니다.\n\n");
 }
 
-void Update(int id, char* update){
+void Update(int id, char* update_name,char* update_phone,int age){
+    
+
     for (int i = 0; i < MAX_STD; ++i) {
         if(data[i].Used && data[i].id == id){
-            strcpy(data[i].name,update);
-            printf(" 수정 되었습니다 : %d -> %s\n\n",id,update);
+            strcpy(data[i].name,update_name);
+            strcpy(data[i].phone,update_phone);
+            data[i].age = age;
+            printf(" 수정 되었습니다 : %d -> %s, %s, %d\n\n",id,update_name,update_phone,age);
             return;
         }
     }
-    printf(" 데이터가 없습니다.\n\n");
+        printf(" 데이터가 없습니다.\n\n");
 }
 
 void Delete(int id, char* name){
@@ -65,7 +69,7 @@ void Search(int id){
     printf("---------------------\n");
     for (int i = 0; i < MAX_STD; ++i) {
         if(data[i].Used && data[i].id == id){
-            printf(" 데이터를 검색했습니다.\n---------------------\n 학번 : %d\n 이름 : %s\n 전화번호 : %s\n 나이 : %d\n---------------------\n \n\n",id,data[i].name,data[i].phone,data[i].age);
+            printf(" 데이터를 검색했습니다.\n---------------------\n - 학번 : %d\n - 이름 : %s\n - 전화번호 : %s\n - 나이 : %d\n---------------------\n \n\n",id,data[i].name,data[i].phone,data[i].age);
             return;
         }
     }
@@ -77,7 +81,7 @@ void All(){
 
     for (int i = 0; i < MAX_STD; ++i) {
         if (data[i].Used == 1) {
-            printf(" 이름 : %s, 학번 : %d \n", data[i].name, data[i].id);
+            printf(" -----------------\n - 이름 : %s\n - 학번 : %d\n - 전화번호 : %s\n - 나이 : %d\n", data[i].name, data[i].id,data[i].phone,data[i].age);
             Used = 1;
         }
     }
@@ -101,9 +105,10 @@ int main(){
         printf("#  5. 모든 데이터 검색 \n");
         printf("#  6. 프로그램 종료   \n");
         printf("\033[35m===================\n\033[0m");
-        printf("선택 : ");
+        printf(" 선택 : ");
         scanf("%d",&select);
         getchar();
+
 
         switch (select) {
 
@@ -115,10 +120,10 @@ int main(){
                 printf(" 이름 입력 : ");
                 fgets(name,sizeof(name),stdin);
                 name[strcspn(name,"\n")] = 0;
-                printf("전화번호 입력 : ");
+                printf(" 전화번호 입력 : ");
                 fgets(phone,sizeof(phone),stdin);
                 phone[strcspn(phone,"\n")] = 0;
-                printf("나이 입력 : ");
+                printf(" 나이 입력 : ");
                 scanf(" %d",&age);
                 getchar();
                 Insert(id,name,phone,age);
@@ -126,13 +131,19 @@ int main(){
 
             case 2:
                 printf("\n 데이터를 수정합니다!\n\n");
-                printf("수정할 학번 입력 : ");
+                printf(" 수정할 학번 입력 : ");
                 scanf("%d",&id);
                 getchar();
-                printf("새로운 이름 입력 : ");
+                printf(" 새로운 이름 입력 : ");
                 fgets(name, sizeof(name),stdin);
                 name[strcspn(name,"\n")] = 0;
-                Update(id,name);
+                printf(" 새로운 전화번호 입력 : ");
+                fgets(phone, sizeof(phone),stdin);
+                phone[strcspn(phone,"\n")] = 0;
+                printf("새로운 나이 입력 : ");
+                scanf("%d",&age);
+                getchar();
+                Update(id,name,phone,age);
                 break;
 
             case 3:
@@ -159,6 +170,13 @@ int main(){
                 printf("\n 프로그램 종료!\n");
 
                 return 0;
+        }
+        printf("메뉴로 돌아가기(아무키나 누르세요) : ");
+        scanf("%d", &select);
+        getchar();
+
+        if (select == 0) {
+            continue;
         }
     }
 }
