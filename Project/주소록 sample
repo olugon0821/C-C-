@@ -50,12 +50,21 @@ void Delete(int id){
 
 void Search(int id){
     for (int i = 0; i < MAX_STD; ++i) {
-        if(data[i].id && data[i].Used == id){
+        if(data[i].Used && data[i].id == id){
             printf("데이터를 검색했습니다. : %d, %s\n",id,data[i].name);
             return;
         }
     }
     printf("데이터를 찾지 못했습니다.\n");
+}
+
+void All(){
+    for (int i = 0; i < MAX_STD; ++i) {
+        if(data[i].Used == 1) {
+            printf("이름 : %s, 학번 : %d \n", data[i].name, data[i].id);
+        }
+    }
+
 }
 
 int main(){
@@ -68,7 +77,8 @@ int main(){
         printf("2. 데이터 수정\n");
         printf("3. 데이터 삭제\n");
         printf("4. 데이터 검색\n");
-        printf("5. 프로그램 종료\n");
+        printf("5. 모든 데이터 검색\n");
+        printf("6. 프로그램 종료\n");
         printf("선택 : ");
         scanf("%d",&select);
         getchar();
@@ -80,7 +90,7 @@ int main(){
                 scanf("%d",&id);
                 getchar();
                 printf("이름 입력 : \n");
-                fgets(namfe,sizeof(name),stdin);
+                fgets(name,sizeof(name),stdin);
                 name[strcspn(name,"\n")] = 0;
                 Insert(id,name);
                 break;
@@ -108,7 +118,11 @@ int main(){
                 Search(id);
                 break;
             case 5:
-                printf("프로그램을 종료합니다!\n");
+                printf("모든 데이터를 검색합니다!\n");
+                All();
+                break;
+            case 6:
+
                 return 0;
         }
     }
