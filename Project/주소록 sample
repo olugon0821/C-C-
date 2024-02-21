@@ -53,7 +53,7 @@ void Update(char* id, char* update_name,char* update_phone,int age) {
         printf(" 데이터가 없습니다.\n\n");
 }
 
-void Delete(char* id, char* name){
+void Delete(char* id){
 
     for (int i = 0; i < MAX_STD; ++i) {
         if(data[i].Used && strcmp(data[i].id, id) == 0){
@@ -156,7 +156,7 @@ int main(){
                 printf("삭제할 데이터의 학번을 입력하세요 : ");
                 fgets(id, sizeof(id), stdin);
                 id[strcspn(id, "\n")] = 0;
-                Delete(id,name);
+                Delete(id);
                 break;
 
             case 4:
