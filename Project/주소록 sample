@@ -7,13 +7,15 @@
 typedef struct {
     int id;
     char name[100];
+    char phone[100];
+    int age;
     int Used;
 
 } Student;
 
 Student data[MAX_STD];
 
-void Insert(int id, char* name){
+void Insert(int id, char* name, char* phone, int age){
 
     for (int i = 0; i < MAX_STD; ++i) {
         if(data[i].Used && data[i].id == id){
@@ -25,8 +27,11 @@ void Insert(int id, char* name){
     for (int i = 0; i < MAX_STD; ++i) {
         if(!data[i].Used){
             data[i].id = id;
+            data[i].age = age;
             strcpy(data[i].name,name);
+            strcpy(data[i].phone,phone);
             data[i].Used = 1;
+
             printf("\n [데이터 삽입 완료 : 학번 : %d, 이름 : %s]\n\n",id,name);
             return;
         }
@@ -57,9 +62,10 @@ void Delete(int id, char* name){
 }
 
 void Search(int id){
+    printf("---------------------\n");
     for (int i = 0; i < MAX_STD; ++i) {
         if(data[i].Used && data[i].id == id){
-            printf(" 데이터를 검색했습니다. : %d, %s\n\n",id,data[i].name);
+            printf(" 데이터를 검색했습니다.\n---------------------\n 학번 : %d\n 이름 : %s\n 전화번호 : %s\n 나이 : %d\n---------------------\n \n\n",id,data[i].name,data[i].phone,data[i].age);
             return;
         }
     }
@@ -67,30 +73,34 @@ void Search(int id){
 }
 
 void All(){
+    int Used =0;
+
     for (int i = 0; i < MAX_STD; ++i) {
-        if(data[i].Used == 1) {
+        if (data[i].Used == 1) {
             printf(" 이름 : %s, 학번 : %d \n", data[i].name, data[i].id);
-            return;
+            Used = 1;
         }
     }
+    if(Used == 0)
     printf("\033[31m !!! 입력된 데이터가 없습니다. !!!\033[0m\n\n");
 }
 
 int main(){
-    int select, id;
+    int select, id, age;
     char name[100];
+    char phone[100];
 
     while(1){
-        printf("\033[33m###################\033[0m");
-        printf("\033[32m\n 메뉴 \n\033[0m");
-        printf("-------------------\n");
+        printf("\033[35m===================\033[0m");
+        printf("\033[32m\n     -- MENU -- \n\033[0m");
+        printf("\033[35m===================\n\033[0m");
         printf("#  1. 데이터 삽입     \n");
         printf("#  2. 데이터 수정     \n");
         printf("#  3. 데이터 삭제     \n");
         printf("#  4. 데이터 검색     \n");
         printf("#  5. 모든 데이터 검색 \n");
         printf("#  6. 프로그램 종료   \n");
-        printf("-------------------\n");
+        printf("\033[35m===================\n\033[0m");
         printf("선택 : ");
         scanf("%d",&select);
         getchar();
@@ -105,7 +115,13 @@ int main(){
                 printf(" 이름 입력 : ");
                 fgets(name,sizeof(name),stdin);
                 name[strcspn(name,"\n")] = 0;
-                Insert(id,name);
+                printf("전화번호 입력 : ");
+                fgets(phone,sizeof(phone),stdin);
+                phone[strcspn(phone,"\n")] = 0;
+                printf("나이 입력 : ");
+                scanf(" %d",&age);
+                getchar();
+                Insert(id,name,phone,age);
                 break;
 
             case 2:
