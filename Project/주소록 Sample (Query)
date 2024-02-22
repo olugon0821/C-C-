@@ -1,0 +1,218 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <mysql/mysql.h>
+
+#define MAX_STD 100
+
+
+
+typedef struct {
+    char id[20]; // 학번 문자열로 사용
+    char name[100];
+    char phone[100];
+    int age;
+    int Used;
+
+} Student;
+
+Student data[MAX_STD];
+
+/* // SQL 쿼리문을 사용하지 않은 일반코드
+    void Insert(char* id, char* name, char* phone, int age){
+    // 학번 = 문자열 strcmp()를 사용하여 비교
+    for (int i = 0; i < MAX_STD; ++i) {
+        if(data[i].Used && strcmp(data[i].id, id) == 0){
+            printf("\033[31m !!! 이미 존재하는 학번입니다. !!!\033[0m\n\n");
+            return;
+        }
+    }
+
+    for (int i = 0; i < MAX_STD; ++i) {
+        if(!data[i].Used){
+            strcpy(data[i].id, id);
+            data[i].age = age;
+            strcpy(data[i].name,name);
+            strcpy(data[i].phone,phone);
+            data[i].Used = 1;
+
+            printf("\n [데이터 삽입 완료 : 학번 : %s, 이름 : %s]\n\n", id, name);
+            return;
+        }
+    }
+    printf(" 데이터가 모두 찼습니다.\n\n");
+}
+*/
+
+//SQL 쿼리문을 이용한 코드
+void Insert(char* id, char* name, char* phone, int age, MYSQL *conn){
+    char query[255];
+    sprintf(query,"insert into user (id, name, phone, age) values ('%s', '%s', '%s', '%d')",id,name,phone,age);
+    if(mysql_query(conn,query)){
+        fprintf(stderr,"%s\n", mysql_error(conn));
+        exit(1);
+    }
+    printf("\n [데이터 삽입 완료 : 학번 : %s, 이름 : %s]\n\n", id, name);
+}
+
+void Update(char* id, char* update_name,char* update_phone,int age) {
+
+    for (int i = 0; i < MAX_STD; ++i) {
+        if (data[i].Used && strcmp(data[i].id, id) == 0) {
+            strcpy(data[i].name, update_name);
+            strcpy(data[i].phone, update_phone);
+            data[i].age = age;
+            printf(" 수정 되었습니다 : %s -> %s, %s, %d\n\n", id, update_name, update_phone, age);
+            return;
+        }
+    }
+        printf(" 데이터가 없습니다.\n\n");
+}
+
+void Delete(char* id){
+
+    for (int i = 0; i < MAX_STD; ++i) {
+        if(data[i].Used && strcmp(data[i].id, id) == 0){
+            data[i].Used = 0;
+            printf(" 데이터가 삭제 되었습니다. : %s, %s\n\n",id,data[i].name);
+            return;
+        }
+    }
+    printf(" 일치하는 데이터가 없습니다.\n\n");
+}
+
+void Search(char* id){
+    int use = 0;
+
+    printf("---------------------\n");
+
+    for (int i = 0; i < MAX_STD; ++i) {
+        if(data[i].Used && strncmp(data[i].id, id, strlen(id)) == 0){
+            printf(" 데이터를 검색했습니다.\n---------------------\n - 학번 : %s\n - 이름 : %s\n - 전화번호 : %s\n - 나이 : %d\n---------------------\n \n\n",data[i].id,data[i].name,data[i].phone,data[i].age);
+            use = 1;
+        }
+    }
+    if(use != 1)
+        printf(" 데이터를 찾지 못했습니다.\n\n");
+}
+
+void All(){
+    int Used =0;
+
+    for (int i = 0; i < MAX_STD; ++i) {
+        if (data[i].Used == 1) {
+            printf(" -----------------\n - 이름 : %s\n - 학번 : %s\n - 전화번호 : %s\n - 나이 : %d\n", data[i].name, data[i].id,data[i].phone,data[i].age);
+            Used = 1;
+        }
+    }
+    if(Used == 0)
+        printf("\033[31m !!! 입력된 데이터가 없습니다. !!!\033[0m\n\n");
+}
+
+int main(){
+
+    MYSQL* conn;
+    conn = mysql_init(NULL);
+    if(conn == NULL){
+        fprintf(stderr,"mysql_init() failed\n");
+        exit(1);
+    }
+
+    if (mysql_real_connect(conn,"localhost","lgg","iot123","Address",3306,NULL,0) == NULL){
+        fprintf(stderr,"mysql_real_connect() failed: %s\n", mysql_error(conn));
+        mysql_close(conn);
+        exit(1);
+    }
+
+    int select, age;
+    char name[100];
+    char phone[100];
+    char id[20];
+
+    while(1){
+        printf("\033[35m===================\033[0m");
+        printf("\033[32m\n     -- MENU -- \n\033[0m");
+        printf("\033[35m===================\n\033[0m");
+        printf("#  1. 데이터 삽입     \n");
+        printf("#  2. 데이터 수정     \n");
+        printf("#  3. 데이터 삭제     \n");
+        printf("#  4. 데이터 검색     \n");
+        printf("#  5. 모든 데이터 검색 \n");
+        printf("#  6. 프로그램 종료   \n");
+        printf("\033[35m===================\n\033[0m");
+        printf(" 선택 : ");
+        scanf("%d",&select);
+        getchar();
+
+
+        switch (select) {
+
+            case 1:
+                printf("\n 데이터를 삽입합니다!\n\n");
+                printf(" 학번 입력 : ");
+                fgets(id, sizeof(id), stdin);
+                id[strcspn(id, "\n")] = 0;
+                printf(" 이름 입력 : ");
+                fgets(name,sizeof(name),stdin);
+                name[strcspn(name,"\n")] = 0;
+                printf(" 전화번호 입력 : ");
+                fgets(phone,sizeof(phone),stdin);
+                phone[strcspn(phone,"\n")] = 0;
+                printf(" 나이 입력 : ");
+                scanf(" %d",&age);
+                getchar();
+                Insert(id,name,phone,age,conn);
+                break;
+
+            case 2:
+                printf("\n 데이터를 수정합니다!\n\n");
+                printf(" 수정할 학번 입력 : ");
+                fgets(id, sizeof(id), stdin);
+                id[strcspn(id, "\n")] = 0;
+                printf(" 새로운 이름 입력 : ");
+                fgets(name, sizeof(name),stdin);
+                name[strcspn(name,"\n")] = 0;
+                printf(" 새로운 전화번호 입력 : ");
+                fgets(phone, sizeof(phone),stdin);
+                phone[strcspn(phone,"\n")] = 0;
+                printf("새로운 나이 입력 : ");
+                scanf("%d",&age);
+                getchar();
+                Update(id,name,phone,age);
+                break;
+
+            case 3:
+                printf("\n 데이터를 삭제 합니다!\n\n");
+                printf("삭제할 데이터의 학번을 입력하세요 : ");
+                fgets(id, sizeof(id), stdin);
+                id[strcspn(id, "\n")] = 0;
+                Delete(id);
+                break;
+
+            case 4:
+                printf("\n 데이터를 검색합니다!\n\n");
+                printf("검색할 데이터의 학번을 입력하세요 : ");
+                fgets(id, sizeof(id), stdin);
+                id[strcspn(id, "\n")] = 0;
+                Search(id);
+                break;
+
+            case 5:
+                printf("\n 모든 데이터를 검색합니다!\n\n");
+                All();
+                break;
+
+            case 6:
+                printf("\n 프로그램 종료!\n");
+
+                return 0;
+        }
+        printf("메뉴로 돌아가기(아무키나 입력하세요) : ");
+        scanf("%d", &select);
+        getchar();
+
+        if (select == 0) {
+            continue;
+        }
+    }
+}
