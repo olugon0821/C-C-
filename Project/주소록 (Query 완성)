@@ -128,7 +128,7 @@ void Search(char* id){
 }
 */
 
-
+// ##################  SQL 쿼리문을 이용한 Search  ################## //
 void Search(char* id, MYSQL* conn){
     MYSQL_RES* res;
     MYSQL_ROW row;
@@ -168,6 +168,7 @@ void All(){
 }
 */
 
+// ##################  SQL 쿼리문을 이용한 SearchALL  ################## //
 void SearchALL(MYSQL* conn){
     MYSQL_RES* res;
     MYSQL_ROW row;
