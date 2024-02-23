@@ -1,0 +1,3 @@
+/home/iot/CLionProjects/Address_SP/cmake-build-debug/CMakeFiles/Address_SP.dir
+/home/iot/CLionProjects/Address_SP/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/iot/CLionProjects/Address_SP/cmake-build-debug/CMakeFiles/rebuild_cache.dir
