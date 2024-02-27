@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <sqlite3.h>
+
+static int callbk(void* Nused, int argc, char** argv, char** Colname){
+    Nused = 0;
+    for (int i = 0; i < argc; ++i) {
+        if (argv[i] != NULL) {
+            printf("%s = %s\n", Colname[i], argv[i]);
+        } else {
+            printf("%s = NULL\n", Colname[i]);
+        }
+    }
+    printf("\n");
+    return 0;
+}
+
+int main() {
+    sqlite3 *db;
+    char *errMsg = 0;
+    int rc;
+    const char *sql;
+
+    rc = sqlite3_open("product.db", &db);
+    if(rc) {
+        fprintf(stderr, "데이터베이스 열기 실패: %s\n", sqlite3_errmsg(db));
+        return(0);
+    }
+    sql = "DROP TABLE IF EXISTS PRODUCT;";
+    sqlite3_exec(db,sql,0,0,&errMsg);
+
+    sql = "CREATE TABLE PRODUCT("
+          "ID INT PRIMARY KEY NOT NULL,"
+          "NAME TEXT NOT NULL,"
+          "BRAND TEXT NOT NULL)";
+
+    rc = sqlite3_exec(db, sql, 0, 0, &errMsg);
+    if(rc != SQLITE_OK) {
+        fprintf(stderr, " SQL error: %s\n", errMsg);
+        sqlite3_free(errMsg);
+    } else {
+        fprintf(stdout, " 테이블 생성 성공\n");
+    }
+
+    sql = "INSERT INTO PRODUCT (ID, NAME, BRAND) "
+          "VALUES (1, '핸드폰', '삼성'),(2,'테블릿','애플')";
+
+    rc = sqlite3_exec(db, sql, 0, 0, &errMsg);
+    if(rc != SQLITE_OK) {
+        fprintf(stderr, "데이터 삽입 중 SQL error: %s\n", errMsg);
+        sqlite3_free(errMsg);
+    } else {
+        fprintf(stdout, "데이터 삽입 성공\n\n");
+    }
+
+    sql = "SELECT * FROM PRODUCT";
+
+    rc = sqlite3_exec(db, sql, callbk, 0, &errMsg);
+
+    // 데이터베이스 닫기
+    sqlite3_close(db);
+
+    return 0;
+}
