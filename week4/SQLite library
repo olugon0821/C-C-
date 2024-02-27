@@ -1,0 +1,75 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <sqlite3.h>
+
+
+static int callbk(void* Nused, int argc, char** argv, char** Colname){
+    Nused = 0;
+    for (int i = 0; i < argc; ++i) {
+        if (argv[i] != NULL) {
+            printf("%s = %s\n", Colname[i], argv[i]);
+        } else {
+            printf("%s = NULL\n", Colname[i]);
+        }
+    }
+    printf("\n");
+    return 0;
+}
+
+
+int main() {
+    sqlite3 *db;
+    char *errMsg = 0;
+    int rc;
+    const char *sql;
+
+    rc = sqlite3_open("library.db", &db);
+    if(rc) {
+        fprintf(stderr, "데이터베이스 열기 실패: %s\n", sqlite3_errmsg(db));
+        return(0);
+    }
+
+    sql = "DROP TABLE IF EXISTS library;";
+    sqlite3_exec(db,sql,0,0,&errMsg);
+
+
+    sql = "CREATE TABLE library("
+          "BookID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+          "PRICE INT NOT NULL,"
+          "BOOKNAME TEXT NOT NULL,"
+          "WRITER TEXT NOT NULL,"
+          "BOOKROOM INT NOT NULL,"
+          "SITE TEXT);";
+
+
+    rc = sqlite3_exec(db, sql, 0, 0, &errMsg);
+    if(rc != SQLITE_OK) {
+        fprintf(stderr, " SQL error: %s\n", errMsg);
+        sqlite3_free(errMsg);
+    } else {
+        fprintf(stdout, " 테이블 생성 성공\n");
+    }
+
+
+    sql = "INSERT INTO library VALUES (1,30000,'c프로그래밍','홍길동',7,'www.Yes24.com'),(2, 50000, '영상처리', '이순신', 6, 'www.Kyobobook.co.kr')";
+
+
+    rc = sqlite3_exec(db, sql, 0, 0, &errMsg);
+    if(rc != SQLITE_OK) {
+        fprintf(stderr, "데이터 삽입 중 SQL error: %s\n", errMsg);
+        sqlite3_free(errMsg);
+    } else {
+        fprintf(stdout, "데이터 삽입 성공\n\n");
+    }
+
+
+    sql = "SELECT * FROM library";
+
+
+    rc = sqlite3_exec(db, sql, callbk, 0, &errMsg);
+
+    // 데이터베이스 닫기
+    sqlite3_close(db);
+
+    return 0;
+}
