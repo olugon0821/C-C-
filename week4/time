@@ -1,0 +1,19 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main() {
+
+    time_t current;
+    struct tm *timeinfo;
+    char timeStr[80];
+
+    time(&current);
+    timeinfo = localtime(&current);
+
+    strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", timeinfo);
+
+    printf("현재 시간: %s\n", timeStr);
+
+    return 0;
+}
