@@ -1,0 +1,24 @@
+#include <stdio.h>
+
+int main() {
+int a,b;
+int result;
+
+FILE * fp = fopen("input.txt","wt");
+
+    printf("두 수 입력 : ");
+    scanf("%d %d",&a,&b);
+
+    fprintf(fp,"%d %d",a,b);
+    fclose(fp);
+
+FILE * find = fopen("input.txt","rt");
+    fscanf(find,"%d %d",&a, &b);
+    result = a*b;
+    fclose(find);
+
+FILE * fout = fopen("output.txt","wt");
+    fprintf(fout,"%d",a*b);
+    fclose(fout);
+return 0;
+}
