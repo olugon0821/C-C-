@@ -1,0 +1,12 @@
+#include <stdio.h>
+
+int main() {
+    FILE * fp = fopen("data.txt","wt");
+    fputc('A',fp);
+    fputc('\n', fp);
+    fputc('B', fp);
+    fputc('\n', fp);
+    fputs("asdfsdafsdafdsafsafas\n", fp);
+    fclose(fp);
+    return 0;
+}
