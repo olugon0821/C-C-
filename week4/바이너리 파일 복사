@@ -1,0 +1,48 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+int main(){
+    char srcFileName[100];
+    char dstFileName[100];
+    FILE *src;
+    FILE *dst;
+
+    scanf("%s %s", srcFileName, dstFileName);
+
+    src = fopen(srcFileName, "rb");
+    if (src == NULL) {
+        printf("원본 파일을 열 수 없습니다.\n");
+        return 1;
+    }
+
+    dst = fopen(dstFileName, "wb");
+    if (dst == NULL) {
+        printf("대상 파일을 열 수 없습니다.\n");
+        fclose(src);
+        return 1;
+    }
+
+
+    char buffer[1024];
+    int count;
+
+    while(1){
+        count = fread((void*)buffer,1, sizeof(buffer),src);
+        if(count < sizeof(buffer)) {
+            if (feof(src) != 0) {
+                fwrite((void *) buffer, 1, count, dst);
+                puts("완료");
+                break;
+            } else
+                puts("실패");
+            break;
+        }
+        fwrite((void*)buffer,1,count,dst);
+
+    }
+
+    fclose(src);
+    fclose(dst);
+
+    return 0;
+}
