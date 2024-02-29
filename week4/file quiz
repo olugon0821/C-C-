@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+/*
+    FILE * fp = fopen("mystory.txt","wt");
+
+    fputs("#이름 : 홍길동\n",fp);
+    fputs("#주민번호 : 900208-1012345\n",fp);
+    fputs("#전화번호 : 010-1111-1111\n",fp);
+    fclose(fp);
+*/
+/*
+    FILE * fp1 = fopen("mystory.txt","a+t");
+    fputs("#즐겨먹는 음식 : 짬뽕, 탕수육\n",fp1);
+    fputs("#취미 : 축구",fp1);
+    */
+    
+    /*
+    char fp[100];
+    FILE * fp2 = fopen("mystory.txt","rt");
+    while(fgets(fp, sizeof(fp),fp2)) {
+        fprintf(stdout, "%s", fp);
+    }
+     */
+    return 0;
+}
