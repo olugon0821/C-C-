@@ -1,0 +1,20 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+int main(){
+    FILE * src = fopen("src.txt","rt");
+    FILE * dst = fopen("dst.txt","wt");
+    int cp;
+
+    while ((cp = getc(src))!=EOF)
+        fputc(cp,dst);
+
+    if(feof(src)!=0)
+        puts("성공");
+    else
+        puts("실패");
+
+    fclose(src);
+    fclose(dst);
+
+}
