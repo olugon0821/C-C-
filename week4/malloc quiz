@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+
+int main() {
+
+    int length, len;
+
+    printf("문자열 갯수 입력 : ");
+    scanf("%d", &length);
+    getchar();
+    char *str = (char *) malloc(sizeof(char) * (length+1));
+
+    printf("문자열을 입력 하세요 : ");
+    fgets(str,length+1,stdin);
+    str[strlen(str)-1] = 0;
+    len = strlen(str) - 1;
+    
+    for (int i = len; i > 0; i--) {
+        if (str[i] == ' ') {
+            printf("%s ", &str[i + 1]);
+            str[i] = 0;
+        }
+    }
+    printf("%s", &str[0]);
+    free(str);
+/*
+    int len = 5;
+    int* arr = (int *) malloc(sizeof(int)*len);
+    int a = 0;
+
+
+    while (1) {
+        printf("정수 입력 : ");
+        scanf("%d", &arr[a]);
+        if(arr[a] == -1)
+            break;
+        if(len == a+1){
+            len += 3;
+            arr = (int *)realloc(arr, sizeof(int) * len);
+            }
+        a++;
+        }
+    for (int i = 0; i < a; i++)
+        printf("%d ",arr[i]);
+
+    free(arr);
+    */
+
+    return 0;
+}
