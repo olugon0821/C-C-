@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct ListNode{
+    char arr[100];
+    struct ListNode* link;
+} Node;
+
+typedef struct{
+    Node* head;
+
+}linkedList_h;
+
+//함수선언
+linkedList_h* createLinkedList_h(void);
+void insertFirstNode(linkedList_h* L, char* X);
+void printList(linkedList_h* L);
+
+
+int main() {
+
+    //1. 헤드 만들기
+    linkedList_h* L;
+    L = createLinkedList_h();
+    printf("(1) 공백 리스트 생성하기!\n");
+    printList(L);
+
+    //2. 데이터 삽입
+    printf("\n(4) 리스트 첫 번째에 [월] 노드 삽입하기! \n");
+    insertFirstNode(L, "월");
+    printList(L);
+    return 0;
+}
+
+linkedList_h* createLinkedList_h(void) {
+    linkedList_h* L;
+    L = (linkedList_h*)malloc(sizeof(linkedList_h));
+    L->head = NULL;		// 공백 리스트이므로 NULL로 설정
+    return L;
+}
+
+void printList(linkedList_h* L) {
+    Node* p;
+    printf("L = (");
+    p = L->head;
+    while (p != NULL) {
+        printf("%s", p->arr);
+        p = p->link;
+        if (p != NULL) printf(", ");
+    }
+    printf(") \n");
+}
+
+void insertFirstNode(linkedList_h* L, char* x) {
+    Node* newNode;
+    newNode = (Node*)malloc(sizeof(Node));	// 삽입할 새 노드 할당
+    strcpy(newNode->arr, x);						// 새 노드의 데이터 필드에 x 저장
+    newNode->link = L->head;
+    L->head = newNode;
+}
